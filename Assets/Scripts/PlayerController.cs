@@ -22,6 +22,16 @@ public class PlayerController : MonoBehaviour
         if (isPlaying)
         {
             rb.velocity = new Vector2 (Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
+
+            if (Input.GetMouseButton(0))
+            {
+                rb.AddTorque(rotateSpeed * Time.deltaTime, ForceMode2D.Force);
+            }
+
+            if (Input.GetMouseButton(1))
+            {
+                rb.AddTorque(-rotateSpeed * Time.deltaTime, ForceMode2D.Force);
+            }
         }
     }
 }
