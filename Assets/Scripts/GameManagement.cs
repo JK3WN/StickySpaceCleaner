@@ -16,6 +16,7 @@ public class GameManagement : MonoBehaviour
 
     public Camera mainCamera;
     public GameObject[] spawners, missAreas, debrisList;
+    public GameObject gameOverScreen;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class GameManagement : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetInt("CurrentScore", 0);
+        PlayerPrefs.SetInt("CurrentMiss", 0);
         StartCoroutine(Spawn());
     }
 
@@ -42,6 +44,12 @@ public class GameManagement : MonoBehaviour
     {
         if (isPlaying)
         {
+            if(PlayerPrefs.GetInt("CurrentMiss") >= 3)
+            {
+                isPlaying = false;
+                gameOverScreen.SetActive(true);
+            }
+
             mainCamera.orthographicSize += growSpeed * Time.deltaTime;
             minSize = 0.1f * mainCamera.orthographicSize;
             maxSize = 0.2f * mainCamera.orthographicSize;
@@ -59,13 +67,13 @@ public class GameManagement : MonoBehaviour
             spawners[3].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, mainCamera.nearClipPlane)) + new Vector3(-1, 0, 0), Quaternion.identity);
             spawners[3].transform.localScale = new Vector3(0.1f, 1.8f * mainCamera.orthographicSize);
 
-            missAreas[0].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 1, mainCamera.nearClipPlane)) + new Vector3(0, 3, 0), Quaternion.identity);
+            missAreas[0].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 1, mainCamera.nearClipPlane)) + new Vector3(0, 0.6f * mainCamera.orthographicSize, 0), Quaternion.identity);
             missAreas[0].transform.localScale = new Vector3(4.8f * mainCamera.orthographicSize, 0.1f);
-            missAreas[1].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(1, 0.5f, mainCamera.nearClipPlane)) + new Vector3(3, 0, 0), Quaternion.identity);
+            missAreas[1].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(1, 0.5f, mainCamera.nearClipPlane)) + new Vector3(0.6f * mainCamera.orthographicSize, 0, 0), Quaternion.identity);
             missAreas[1].transform.localScale = new Vector3(0.1f, 3.2f * mainCamera.orthographicSize);
-            missAreas[2].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, mainCamera.nearClipPlane)) + new Vector3(0, -3, 0), Quaternion.identity);
+            missAreas[2].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, mainCamera.nearClipPlane)) + new Vector3(0, -0.6f * mainCamera.orthographicSize, 0), Quaternion.identity);
             missAreas[2].transform.localScale = new Vector3(4.8f * mainCamera.orthographicSize, 0.1f);
-            missAreas[3].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, mainCamera.nearClipPlane)) + new Vector3(-3, 0, 0), Quaternion.identity);
+            missAreas[3].transform.SetPositionAndRotation(mainCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, mainCamera.nearClipPlane)) + new Vector3(-0.6f * mainCamera.orthographicSize, 0, 0), Quaternion.identity);
             missAreas[3].transform.localScale = new Vector3(0.1f, 3.2f * mainCamera.orthographicSize);
         }
     }
