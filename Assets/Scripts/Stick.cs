@@ -15,7 +15,7 @@ public class Stick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Time.deltaTime);
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
