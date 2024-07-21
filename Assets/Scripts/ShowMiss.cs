@@ -14,7 +14,7 @@ public class ShowMiss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManagement.Instance.isPlaying)
+        if (GameManagement.isPlaying)
         {
             switch (PlayerPrefs.GetInt("CurrentMiss"))
             {

@@ -16,7 +16,7 @@ public class ShowScore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManagement.Instance.isPlaying)
+        if (GameManagement.isPlaying)
         {
             scoreText.text = PlayerPrefs.GetInt("CurrentScore").ToString();
             gameOverText.text = "Game Over!\nYour Score: " + PlayerPrefs.GetInt("CurrentScore").ToString();

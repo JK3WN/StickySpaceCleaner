@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagement : MonoBehaviour
 {
     public static GameManagement Instance { get; private set; }
-    public bool isPlaying = true;
+    public static bool isPlaying = true;
     public Vector3 NW, NE, SW, SE;
     public float growSpeed = 0.1f;
     public float spawnRate = 2.0f;
@@ -18,24 +19,13 @@ public class GameManagement : MonoBehaviour
     public GameObject[] spawners, missAreas, debrisList;
     public GameObject gameOverScreen;
 
-    private void Awake()
-    {
-        if(Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
         PlayerPrefs.SetInt("CurrentScore", 0);
         PlayerPrefs.SetInt("CurrentMiss", 0);
+        isPlaying = true;
+        Debug.Log("F");
         StartCoroutine(Spawn());
     }
 
@@ -107,5 +97,16 @@ public class GameManagement : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void RestartPressed()
+    {
+        isPlaying = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitPressed()
+    {
+        SceneManager.LoadScene(0);
     }
 }

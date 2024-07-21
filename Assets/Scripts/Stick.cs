@@ -20,7 +20,7 @@ public class Stick : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("DebrisFree"))
+        if (GameManagement.isPlaying && collision.gameObject.CompareTag("DebrisFree"))
         {
             collision.transform.SetParent(this.transform);
             collision.gameObject.tag = new string("DebrisStuck");

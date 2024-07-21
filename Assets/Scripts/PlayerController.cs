@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManagement.Instance.isPlaying)
+        if (GameManagement.isPlaying)
         {
             rb.velocity = new Vector2 (Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
             rotateSpeed = 10000f * rb.inertia;
