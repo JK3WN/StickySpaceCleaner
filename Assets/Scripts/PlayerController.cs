@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
         if (GameManagement.Instance.isPlaying)
         {
             rb.velocity = new Vector2 (Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
+            rotateSpeed = 10000f * rb.inertia;
 
             if (Input.GetMouseButton(0))
             {

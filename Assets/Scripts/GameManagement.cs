@@ -11,6 +11,8 @@ public class GameManagement : MonoBehaviour
     public float spawnRate = 2.0f;
     public float debrisTorque = 10f;
     public float debrisForce = 3f;
+    public float minSize = 0.5f;
+    public float maxSize = 1.0f;
 
     public Camera mainCamera;
     public GameObject[] spawners, missAreas, debrisList;
@@ -31,6 +33,7 @@ public class GameManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PlayerPrefs.SetInt("CurrentScore", 0);
         StartCoroutine(Spawn());
     }
 
@@ -40,6 +43,9 @@ public class GameManagement : MonoBehaviour
         if (isPlaying)
         {
             mainCamera.orthographicSize += growSpeed * Time.deltaTime;
+            minSize = 0.1f * mainCamera.orthographicSize;
+            maxSize = 0.2f * mainCamera.orthographicSize;
+
             NW = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, mainCamera.nearClipPlane));
             NE = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, mainCamera.nearClipPlane));
             SW = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, mainCamera.nearClipPlane));
@@ -73,6 +79,8 @@ public class GameManagement : MonoBehaviour
             int spawnerType = Random.Range(0, spawners.Length);
             GameObject go = Instantiate(debrisList[debrisType]);
             go.transform.position = new Vector3(Random.Range(spawners[spawnerType].transform.position.x - spawners[spawnerType].transform.lossyScale.x / 2, spawners[spawnerType].transform.position.x + spawners[spawnerType].transform.lossyScale.x / 2), Random.Range(spawners[spawnerType].transform.position.y - spawners[spawnerType].transform.lossyScale.y / 2, spawners[spawnerType].transform.position.y + spawners[spawnerType].transform.lossyScale.y / 2));
+            float size = Random.Range(minSize, maxSize);
+            go.transform.localScale = new Vector3(size, size);
             Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
             rb.AddTorque(Random.Range(-debrisTorque, debrisTorque), ForceMode2D.Impulse);
             switch (spawnerType)

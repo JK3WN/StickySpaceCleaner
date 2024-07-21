@@ -26,6 +26,7 @@ public class Stick : MonoBehaviour
             collision.gameObject.tag = new string("DebrisStuck");
             collision.gameObject.AddComponent<Stick>();
             Destroy(collision.gameObject.GetComponent<Rigidbody2D>());
+            PlayerPrefs.SetInt("CurrentScore", PlayerPrefs.GetInt("CurrentScore") + 1);
         }
     }
 }
