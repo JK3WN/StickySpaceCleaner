@@ -25,6 +25,7 @@ public class Stick : MonoBehaviour
             collision.transform.SetParent(this.transform);
             collision.gameObject.tag = new string("DebrisStuck");
             collision.gameObject.AddComponent<Stick>();
+            Destroy(collision.gameObject.GetComponent<Rigidbody2D>());
         }
     }
 }
