@@ -5,7 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MenuManagement : MonoBehaviour
 {
-    public TMPro.TextMeshProUGUI HighScoreText;
+    public TMPro.TextMeshProUGUI HighScoreText, ButtonText;
+    public GameObject LeaderBoard, ControlBoard;
+
+    private bool leaderBoardOut = true;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +29,19 @@ public class MenuManagement : MonoBehaviour
 
     public void ControlsPressed()
     {
-        
+        leaderBoardOut = !leaderBoardOut;
+        if (leaderBoardOut)
+        {
+            LeaderBoard.SetActive(true);
+            ControlBoard.SetActive(false);
+            ButtonText.text = "Controls";
+        }
+        else
+        {
+            LeaderBoard.SetActive(false);
+            ControlBoard.SetActive(true);
+            ButtonText.text = "High Scores";
+        }
     }
 
     public void QuitPressed()
