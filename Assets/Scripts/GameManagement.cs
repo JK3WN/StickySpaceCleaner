@@ -15,6 +15,8 @@ public class GameManagement : MonoBehaviour
     public float minSize = 0.5f;
     public float maxSize = 1.0f;
 
+    private bool gameOverProcessed = false;
+
     public Camera mainCamera;
     public GameObject[] spawners, missAreas, debrisList;
     public GameObject gameOverScreen;
@@ -25,7 +27,6 @@ public class GameManagement : MonoBehaviour
         PlayerPrefs.SetInt("CurrentScore", 0);
         PlayerPrefs.SetInt("CurrentMiss", 0);
         isPlaying = true;
-        Debug.Log("F");
         StartCoroutine(Spawn());
     }
 
@@ -34,10 +35,43 @@ public class GameManagement : MonoBehaviour
     {
         if (isPlaying)
         {
-            if(PlayerPrefs.GetInt("CurrentMiss") >= 3)
+            if(PlayerPrefs.GetInt("CurrentMiss") >= 3 && !gameOverProcessed)
             {
                 isPlaying = false;
                 gameOverScreen.SetActive(true);
+
+                if(PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("1st"))
+                {
+                    PlayerPrefs.SetInt("5th", PlayerPrefs.GetInt("4th"));
+                    PlayerPrefs.SetInt("4th", PlayerPrefs.GetInt("3rd"));
+                    PlayerPrefs.SetInt("3rd", PlayerPrefs.GetInt("2nd"));
+                    PlayerPrefs.SetInt("2nd", PlayerPrefs.GetInt("1st"));
+                    PlayerPrefs.SetInt("1st", PlayerPrefs.GetInt("CurrentScore"));
+                }
+                else if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("2nd"))
+                {
+                    PlayerPrefs.SetInt("5th", PlayerPrefs.GetInt("4th"));
+                    PlayerPrefs.SetInt("4th", PlayerPrefs.GetInt("3rd"));
+                    PlayerPrefs.SetInt("3rd", PlayerPrefs.GetInt("2nd"));
+                    PlayerPrefs.SetInt("2nd", PlayerPrefs.GetInt("CurrentScore"));
+                }
+                else if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("3rd"))
+                {
+                    PlayerPrefs.SetInt("5th", PlayerPrefs.GetInt("4th"));
+                    PlayerPrefs.SetInt("4th", PlayerPrefs.GetInt("3rd"));
+                    PlayerPrefs.SetInt("3rd", PlayerPrefs.GetInt("CurrentScore"));
+                }
+                else if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("4th"))
+                {
+                    PlayerPrefs.SetInt("5th", PlayerPrefs.GetInt("4th"));
+                    PlayerPrefs.SetInt("4th", PlayerPrefs.GetInt("CurrentScore"));
+                }
+                else if (PlayerPrefs.GetInt("CurrentScore") > PlayerPrefs.GetInt("5th"))
+                {
+                    PlayerPrefs.SetInt("5th", PlayerPrefs.GetInt("CurrentScore"));
+                }
+
+                gameOverProcessed = true;
             }
 
             mainCamera.orthographicSize += growSpeed * Time.deltaTime;
