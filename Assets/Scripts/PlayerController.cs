@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    private float moveSpeed = 5f;
+    public float startMoveSpeed = 5f;
     public float rotateSpeed = 10f;
 
     public Rigidbody2D rb;
+    public Camera cam;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManagement.isPlaying)
         {
+            moveSpeed = startMoveSpeed * cam.orthographicSize / 5f;
             rb.velocity = new Vector2 (Input.GetAxis("Horizontal") * moveSpeed, Input.GetAxis("Vertical") * moveSpeed);
             rotateSpeed = 10000f * rb.inertia;
 

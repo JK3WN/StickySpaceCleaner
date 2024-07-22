@@ -11,9 +11,11 @@ public class GameManagement : MonoBehaviour
     public float growSpeed = 0.1f;
     public float spawnRate = 2.0f;
     public float debrisTorque = 10f;
-    public float debrisForce = 3f;
-    public float minSize = 0.5f;
-    public float maxSize = 1.0f;
+    public float startDebrisForce = 3f;
+    private float debrisForce;
+    public float startMinSize = 0.5f;
+    public float startMaxSize = 1.0f;
+    private float minSize, maxSize;
 
     private bool gameOverProcessed = false;
 
@@ -75,8 +77,9 @@ public class GameManagement : MonoBehaviour
             }
 
             mainCamera.orthographicSize += growSpeed * Time.deltaTime;
-            minSize = 0.1f * mainCamera.orthographicSize;
-            maxSize = 0.2f * mainCamera.orthographicSize;
+            minSize = startMinSize * mainCamera.orthographicSize / 5f;
+            maxSize = startMaxSize * mainCamera.orthographicSize / 5f;
+            debrisForce = startDebrisForce * mainCamera.orthographicSize / 5f;
 
             NW = mainCamera.ViewportToWorldPoint(new Vector3(0, 1, mainCamera.nearClipPlane));
             NE = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, mainCamera.nearClipPlane));
@@ -107,28 +110,31 @@ public class GameManagement : MonoBehaviour
         while (isPlaying)
         {
             yield return new WaitForSeconds(spawnRate);
-            int debrisType = Random.Range(0, debrisList.Length);
-            int spawnerType = Random.Range(0, spawners.Length);
-            GameObject go = Instantiate(debrisList[debrisType]);
-            go.transform.position = new Vector3(Random.Range(spawners[spawnerType].transform.position.x - spawners[spawnerType].transform.lossyScale.x / 2, spawners[spawnerType].transform.position.x + spawners[spawnerType].transform.lossyScale.x / 2), Random.Range(spawners[spawnerType].transform.position.y - spawners[spawnerType].transform.lossyScale.y / 2, spawners[spawnerType].transform.position.y + spawners[spawnerType].transform.lossyScale.y / 2));
-            float size = Random.Range(minSize, maxSize);
-            go.transform.localScale = new Vector3(size, size);
-            Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
-            rb.AddTorque(Random.Range(-debrisTorque, debrisTorque), ForceMode2D.Impulse);
-            switch (spawnerType)
-            {  
-                case 0:
-                    rb.AddForce(new Vector2(0, -debrisForce), ForceMode2D.Impulse);
-                    break;
-                case 1:
-                    rb.AddForce(new Vector2(-debrisForce, 0), ForceMode2D.Impulse);
-                    break;
-                case 2:
-                    rb.AddForce(new Vector2(0, debrisForce), ForceMode2D.Impulse);
-                    break;
-                default:
-                    rb.AddForce(new Vector2(debrisForce, 0), ForceMode2D.Impulse);
-                    break;
+            for(int i = 0; i <= PlayerPrefs.GetInt("CurrentScore"); i += 20)
+            {
+                int debrisType = Random.Range(0, debrisList.Length);
+                int spawnerType = Random.Range(0, spawners.Length);
+                GameObject go = Instantiate(debrisList[debrisType]);
+                go.transform.position = new Vector3(Random.Range(spawners[spawnerType].transform.position.x - spawners[spawnerType].transform.lossyScale.x / 2, spawners[spawnerType].transform.position.x + spawners[spawnerType].transform.lossyScale.x / 2), Random.Range(spawners[spawnerType].transform.position.y - spawners[spawnerType].transform.lossyScale.y / 2, spawners[spawnerType].transform.position.y + spawners[spawnerType].transform.lossyScale.y / 2));
+                float size = Random.Range(minSize, maxSize);
+                go.transform.localScale = new Vector3(size, size);
+                Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
+                rb.AddTorque(Random.Range(-debrisTorque, debrisTorque), ForceMode2D.Impulse);
+                switch (spawnerType)
+                {
+                    case 0:
+                        rb.AddForce(new Vector2(0, Random.Range(-debrisForce, -debrisForce * 2)), ForceMode2D.Impulse);
+                        break;
+                    case 1:
+                        rb.AddForce(new Vector2(Random.Range(-debrisForce, -debrisForce * 2), 0), ForceMode2D.Impulse);
+                        break;
+                    case 2:
+                        rb.AddForce(new Vector2(0, Random.Range(debrisForce, debrisForce * 2)), ForceMode2D.Impulse);
+                        break;
+                    default:
+                        rb.AddForce(new Vector2(Random.Range(debrisForce, debrisForce * 2), 0), ForceMode2D.Impulse);
+                        break;
+                }
             }
         }
     }
